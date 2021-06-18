@@ -237,7 +237,14 @@ class BOA(object):
                 add_rule = sample(range(nRules),1)[0]
             else: 
                 Yhat_neg_index = list(np.where(np.sum(self.RMatrix[:,rules_curr],axis = 1)<1)[0])
-                mat = np.multiply(self.RMatrix[Yhat_neg_index,:].transpose(),self.Y[Yhat_neg_index])
+#                 print(len(self.RMatrix), max(Yhat_neg_index))
+#                 print(self.RMatrix[Yhat_neg_index,:].transpose())
+#                 print((self.RMatrix[Yhat_neg_index,:].transpose().shape))
+#                 print(len(self.Y), max(Yhat_neg_index))
+#                 print(self.Y[Yhat_neg_index].reset_index(drop=True))
+#                 print(len(Yhat_neg_index))
+                mat = np.multiply(self.RMatrix[Yhat_neg_index,:].transpose(), self.Y[Yhat_neg_index].reset_index(drop=True).values)
+#                 mat = self.RMatrix[Yhat_neg_index,:] * self.Y[Yhat_neg_index].reset_index(drop=True)
                 # TP = np.array(np.sum(mat,axis = 0).tolist()[0])
                 TP = np.sum(mat,axis = 1)
                 FP = np.array((np.sum(self.RMatrix[Yhat_neg_index,:],axis = 0) - TP))
