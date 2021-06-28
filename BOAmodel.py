@@ -98,7 +98,7 @@ class BOA(object):
         Z =  (mat ==lenMatrix).astype(int)
         Zpos = [Z[i] for i in np.where(self.Y>0)][0]
         TP = np.array(np.sum(Zpos,axis=0).tolist()[0])
-        supp_select = np.where(TP>=self.supp*sum(self.Y)/100)[0]
+        supp_select = np.where(TP >= self.supp * sum(self.Y) / 100)[0]
         FP = np.array(np.sum(Z,axis = 0))[0] - TP
         TN = len(self.Y) - np.sum(self.Y) - FP
         FN = np.sum(self.Y) - TP
@@ -171,7 +171,6 @@ class BOA(object):
                         print('\n** chain = {}, max at iter = {} ** \n accuracy = {}, TP = {},FP = {}, TN = {}, FN = {}\n pt_new is {}, prior_ChsRules={}, likelihood_1 = {}, likelihood_2 = {}\n '.format(chain, iter,(cfmatrix[0]+cfmatrix[2]+0.0)/len(self.Y),cfmatrix[0],cfmatrix[1],cfmatrix[2],cfmatrix[3],sum(prob), prob[0], prob[1], prob[2]))
                         # print '\n** chain = {}, max at iter = {} ** \n obj = {}, prior = {}, llh = {} '.format(chain, iter,prior+llh,prior,llh)
                         self.print_rules(rules_new)
-                        print(rules_new)
                 if random() <= alpha:
                     rules_curr_norm,rules_curr,pt_curr = rules_norm.copy(),rules_new.copy(),pt_new
         pt_max = [sum(maps[chain][-1][1]) for chain in range(Nchain)]
@@ -237,15 +236,7 @@ class BOA(object):
                 add_rule = sample(range(nRules),1)[0]
             else: 
                 Yhat_neg_index = list(np.where(np.sum(self.RMatrix[:,rules_curr],axis = 1)<1)[0])
-#                 print(len(self.RMatrix), max(Yhat_neg_index))
-#                 print(self.RMatrix[Yhat_neg_index,:].transpose())
-#                 print((self.RMatrix[Yhat_neg_index,:].transpose().shape))
-#                 print(len(self.Y), max(Yhat_neg_index))
-#                 print(self.Y[Yhat_neg_index].reset_index(drop=True))
-#                 print(len(Yhat_neg_index))
                 mat = np.multiply(self.RMatrix[Yhat_neg_index,:].transpose(), self.Y[Yhat_neg_index].reset_index(drop=True).values)
-#                 mat = self.RMatrix[Yhat_neg_index,:] * self.Y[Yhat_neg_index].reset_index(drop=True)
-                # TP = np.array(np.sum(mat,axis = 0).tolist()[0])
                 TP = np.sum(mat,axis = 1)
                 FP = np.array((np.sum(self.RMatrix[Yhat_neg_index,:],axis = 0) - TP))
                 TN = np.sum(self.Y[Yhat_neg_index]==0)-FP
